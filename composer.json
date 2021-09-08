@@ -3,5 +3,6 @@
   "require": {
     "friendsofphp/php-cs-fixer": "2.19"
   },
-  "type": "library"
+  "type": "library",
+  "bin": ["pre-commit-install"]
 }

@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -u
+echo "php-cs-fixer pre commit hook start"
+
+cd $(dirname "$0")/../..
+PHP_CS_FIXER="vendor/bin/php-cs-fixer"
+HAS_PHP_CS_FIXER=false
+
+CS_FIXER_CONFIG=".php-cs-fixer.dist.php"
+CS_FIXER_CONFIG_NEW=".php-cs-fixer.dist.php"
+CS_FIXER_CONFIG_OLD=".php-cs-fixer.dist"
+
+if test -f "$CS_FIXER_CONFIG_NEW";  then
+  CS_FIXER_CONFIG=$CS_FIXER_CONFIG_NEW
+fi
+
+
+if test -f "$CS_FIXER_CONFIG_OLD";  then
+  CS_FIXER_CONFIG=$CS_FIXER_CONFIG_OLD
+fi
+
+if test -z "$CS_FIXER_CONFIG"; then
+  echo "Unable to find the .php-cs-fixer.dist[.php] file. More info: https://github.com/FriendsOfPHP/PHP-CS-Fixer"
+  exit 1;
+fi
+
+if [ -x $PHP_CS_FIXER ]; then
+ HAS_PHP_CS_FIXER=true
+fi
+
+if $HAS_PHP_CS_FIXER; then
+ FILES=` git status --porcelain | grep -E '*\.php$' | cut -c 4- | tr '\n' ' '`
+ if [ -z "$FILES" ]
+     then
+           echo "No files changes found."
+     else
+           # run cs fixer in a docker container
+            rm -rf .php_cs.cache
+            docker run --rm -t\
+                      -v $(pwd):/project \
+                      -w /project \
+                      php:cli ./vendor/bin/php-cs-fixer -n -vv fix --allow-risky=yes --stop-on-violation --dry-run --using-cache=no --config=${CS_FIXER_CONFIG} ${FILES}
+
+            lintStatus=$?
+
+            if [ $lintStatus -eq 8 ] || [ $lintStatus -eq 0 ]; then
+                docker run --rm -t\
+                          -v $(pwd):/project \
+                          -w /project \
+                          php:cli ./vendor/bin/php-cs-fixer -q -n -vv fix --allow-risky=yes --stop-on-violation --using-cache=yes --config=${CS_FIXER_CONFIG} ${FILES}
+
+               fixExitStatus=$?
+               if [ $fixExitStatus -ne 0 ]; then
+                    exit $fixExitStatus
+               fi
+
+               echo "Add files: ${FILES}"
+               git add ${FILES}
+            else
+                echo "Please correct the errors"
+                exit 1;
+            fi
+     fi
+fi
+
+echo -e "php-cs-fixer pre commit hook finished.\n\n"
