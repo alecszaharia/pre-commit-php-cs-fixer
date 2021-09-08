@@ -1,7 +1,7 @@
 {
   "name": "alecszaharia/pre-commit-php-cs",
   "require": {
-    "friendsofphp/php-cs-fixer": "2.19"
+    "friendsofphp/php-cs-fixer": "^2.19"
   },
   "type": "library",
   "bin": ["pre-commit-install"]
