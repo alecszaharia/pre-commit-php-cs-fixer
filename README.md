@@ -6,10 +6,10 @@ Create a pre-commit hook that will run the php-cs fixes.
     `repositories: [
       {
       "type": "vcs",
-      "url": "https://github.com/alecszaharia/pre-commit-php-cs.git"
+      "url": "https://github.com/alecszaharia/pre-commit-php-cs-fixer.git"
       }
     ]`
-2. Run: `composer require alecszaharia/pre-commit-php-cs`
+2. Run: `composer require alecszaharia/pre-commit-php-cs-fixer`
 3. Run: `./vendor/bin/pre-commit-install` - this will create a pre-commit hook in .git directory 
 4. Create the `.php_cs-fixes.dist.php` your project root. The pre-commit hook will fail unless the file exists.
 

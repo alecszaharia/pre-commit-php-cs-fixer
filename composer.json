@@ -1,5 +1,5 @@
 {
-  "name": "alecszaharia/pre-commit-php-cs",
+  "name": "alecszaharia/pre-commit-php-cs-fixer",
   "require": {
     "friendsofphp/php-cs-fixer": "^2.19"
   },
