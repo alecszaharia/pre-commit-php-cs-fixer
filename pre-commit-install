@@ -3,7 +3,7 @@ set -eu
 
 # move in project root
 PROJECT_ROOT_DIR="$(dirname "$0")/../.." # theoretically we should in project root
-LIB_ROOT_DIR="$PROJECT_ROOT_DIR/vendor/alecszaharia/pre-commit-php-cs"
+LIB_ROOT_DIR="$PROJECT_ROOT_DIR/vendor/alecszaharia/pre-commit-php-cs-fixer"
 
 CS_FIXER="${PROJECT_ROOT_DIR}/vendor/bin/php-cs-fixer"
 GIT_HOOK_PRE_COMMIT="${PROJECT_ROOT_DIR}/.git/hooks/pre-commit"
