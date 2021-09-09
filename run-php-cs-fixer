@@ -36,7 +36,7 @@ if $HAS_PHP_CS_FIXER; then
     docker run --rm -t \
       -v $(pwd):/project \
       -w /project \
-      php:cli ./vendor/bin/php-cs-fixer -q -n -vv fix --allow-risky=yes --stop-on-violation --using-cache=yes ${EXTRA_ARGS} ${FILES}
+      php:cli ./vendor/bin/php-cs-fixer -n -vv fix --allow-risky=yes --stop-on-violation --using-cache=yes ${EXTRA_ARGS} ${FILES}
   fi
 else
     echo "php-cs-fixer executable has not ben found."
