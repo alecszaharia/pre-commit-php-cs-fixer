@@ -4,5 +4,5 @@
     "friendsofphp/php-cs-fixer": "^2.19"
   },
   "type": "library",
-  "bin": ["pre-commit-install"]
+  "bin": ["pre-commit-install","run-php-cs-fixer"]
 }

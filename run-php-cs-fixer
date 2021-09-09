@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -u
+echo "Run php-cs-fixer on al staged php files"
+
+cd $(dirname "$0")/../..
+
+PHP_CS_FIXER="vendor/bin/php-cs-fixer"
+HAS_PHP_CS_FIXER=false
+EXTRA_ARGS=""
+
+CS_FIXER_CONFIG=""
+CS_FIXER_CONFIG_NEW=".php-cs-fixer.dist.php"
+CS_FIXER_CONFIG_OLD=".php-cs-fixer.dist"
+
+if test -f "$CS_FIXER_CONFIG_NEW"; then
+  CS_FIXER_CONFIG=$CS_FIXER_CONFIG_NEW
+fi
+
+if test -f "$CS_FIXER_CONFIG_OLD"; then
+  CS_FIXER_CONFIG=$CS_FIXER_CONFIG_OLD
+fi
+
+if ! test -z "$CS_FIXER_CONFIG"; then
+  EXTRA_ARGS=" --config=${CS_FIXER_CONFIG} "
+fi
+
+if [ -x $PHP_CS_FIXER ]; then
+  HAS_PHP_CS_FIXER=true
+fi
+
+if $HAS_PHP_CS_FIXER; then
+  FILES=$(git status --short | grep '^[MARC]' | grep -E '\.php$' | cut -c 4- | tr '\n' ' ')
+  if [ -z "$FILES" ]; then
+    echo "No files found on git staging."
+  else
+    docker run --rm -t \
+      -v $(pwd):/project \
+      -w /project \
+      php:cli ./vendor/bin/php-cs-fixer -q -n -vv fix --allow-risky=yes --stop-on-violation --using-cache=yes ${EXTRA_ARGS} ${FILES}
+  fi
+else
+    echo "php-cs-fixer executable has not ben found."
+    exit 1;
+fi
+
+echo -e "php-cs-fixer finished.\n\n"

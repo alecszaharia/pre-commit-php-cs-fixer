@@ -14,3 +14,6 @@ Create a pre-commit hook that will run the php-cs fixes.
 4. Create the `.php_cs-fixes.dist.php` your project root. The pre-commit hook will fail unless the file exists.
 
 WARNING: On Phpstorm make sure that on the commit tool the Run Git Hooks is checked.
+
+## Manual Run
+ Run: `./vendor/bin/run-php-cs-fixer`
