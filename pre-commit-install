@@ -43,3 +43,4 @@ cp $LIB_ROOT_DIR/hook/pre-commit.dist $GIT_HOOK_PRE_COMMIT
 chmod +x $GIT_HOOK_PRE_COMMIT
 
 echo "All done!!"
+
